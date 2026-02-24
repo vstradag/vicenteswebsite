@@ -1,0 +1,95 @@
+.scholar-stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.scholar-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.scholar-stats:hover {
+  opacity: 0.9;
+}
+
+.scholar-stats-refreshing .scholar-stat-value {
+  opacity: 0.7;
+}
+
+.scholar-stats-loading {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+.scholar-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.scholar-stat-value {
+  font-family: "Geist", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--accentColor, #c2a4ff);
+  letter-spacing: 1px;
+}
+
+.scholar-number {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.scholar-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.scholar-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accentColor, #c2a4ff);
+  background: rgba(194, 164, 255, 0.1);
+  border: 1px solid rgba(194, 164, 255, 0.4);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+.scholar-profile-btn:hover {
+  background: rgba(194, 164, 255, 0.2);
+  border-color: rgba(194, 164, 255, 0.6);
+  opacity: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .scholar-stat-value {
+    font-size: 1.5rem;
+  }
+  .scholar-stat-label {
+    font-size: 0.75rem;
+  }
+  .scholar-profile-btn {
+    font-size: 0.8rem;
+    padding: 0.55rem 1.15rem;
+  }
+}
