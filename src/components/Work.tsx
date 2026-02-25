@@ -4,7 +4,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
 import { config } from "../config";
-import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,31 +64,42 @@ const Work = () => {
           My <span>Work</span>
         </h2>
         <div className="work-flex">
-          {config.projects.slice(0, 5).map((project, index) => (
+          {config.projects.slice(0, 5).map((project) => {
+            const proj = project as { url?: string; results?: string; year?: number };
+            return (
             <div className="work-box" key={project.id}>
               <div className="work-info">
                 <div className="work-title">
-                  <h3>0{index + 1}</h3>
+                  <h3>{proj.year ?? ""}</h3>
 
                   <div>
-                    <h4>{project.title}</h4>
+                    {proj.url ? (
+                      <a href={proj.url} target="_blank" rel="noopener noreferrer" className="work-title-link" data-cursor="disable">
+                        <h4>{project.title}</h4>
+                      </a>
+                    ) : (
+                      <h4>{project.title}</h4>
+                    )}
                     <p>{project.category}</p>
                   </div>
                 </div>
-                <h4>Tools and features</h4>
-                <p>{project.technologies}</p>
+                <h4>Overview</h4>
+                <p>{project.description}</p>
+                <h4>Key finding</h4>
+                <p>{proj.results ?? project.technologies}</p>
               </div>
-              <WorkImage image={project.image} alt={project.title} />
+              <WorkImage image={project.image} alt={project.title} link={proj.url} />
             </div>
-          ))}
+          );
+          })}
           {/* See All Works Button */}
           <div className="work-box work-box-cta">
             <div className="see-all-works">
               <h3>Want to see more?</h3>
-              <p>Explore all of my projects and creations</p>
-              <Link to="/myworks" className="see-all-btn" data-cursor="disable">
+              <p>Explore all of my publications on Google Scholar</p>
+              <a href={config.scholar.url} target="_blank" rel="noopener noreferrer" className="see-all-btn" data-cursor="disable">
                 See All Works →
-              </Link>
+              </a>
             </div>
           </div>
         </div>

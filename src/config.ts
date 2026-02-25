@@ -57,25 +57,42 @@ export const config = {
     projects: [
         {
             id: 1,
-            title: "Gaze Interaction Demo",
-            category: "HCI / Demo",
-            technologies: "React, Next.js, MediaPipe, TypeScript, Three.js",
+            title: "'Imperfectly and by only a passing glance': the return of the salon hang",
+            category: "M Garbutt, J Blunden, S East, B Spehar, V Estrada Gonzalez, A Dey",
+            technologies: "Museum Management and Curatorship, 1–20",
             image: "/images/headshot.png",
-            description: "An interactive demo combining webcam-based gaze estimation with calibration and a 3D eyeball visualization. Eye-movement-driven interactive experience."
+            description: "Examining how salon-style, floor-to-ceiling exhibition displays shape the way viewers encounter and engage with art in museum spaces.",
+            results: "Evidence that dense curatorial hangs influence aesthetic experience and democratize visual attention across works.",
+            url: "https://doi.org/10.1080/09647775.2025.2609543",
+            year: 2026
         },
         {
             id: 2,
-            title: "Personal Website",
-            category: "Portfolio",
-            technologies: "React, Vite, TypeScript, GSAP",
+            title: "Slow-looking enhances aesthetic experience",
+            category: "V Estrada Gonzalez, N Youn, ER Cardillo, A Chatterjee",
+            technologies: "The Journal of Positive Psychology, 1–11",
             image: "/images/headshot.png",
-            description: "This portfolio site. Clean, fast, and interactive with 3D elements and smooth animations."
+            description: "Testing whether deliberately slowing down and guiding museum visitors through extended contemplation deepens engagement with artworks.",
+            results: "Slow-looking increased compassion, enrapturement, edification, and perceived beauty—supporting transformative aesthetic experiences.",
+            url: "https://doi.org/10.1080/17439760.2025.2552793",
+            year: 2025
+        },
+        {
+            id: 3,
+            title: "Art therapy masks reflect emotional changes in military personnel with PTSS",
+            category: "V Estrada Gonzalez, V Meletaki, M Walker, J Payano Sosa, A Stamper, et al.",
+            technologies: "Scientific Reports 14 (1), 7192",
+            image: "/images/headshot.png",
+            description: "Blinded viewers evaluated masks made by military personnel before and after art therapy—without knowing which was which.",
+            results: "Viewers perceived more negative emotions in initial masks and more positive in final masks, supporting art as a vehicle for emotional expression.",
+            url: "https://www.nature.com/articles/s41598-024-57128-5",
+            year: 2024
         }
     ],
     contact: {
         email: "vicente.estrada.go@gmail.com",
         github: "https://github.com/vstradag",
-        linkedin: "https://linkedin.com/in/vicente-estrada-gonzalez",
+        linkedin: "https://www.linkedin.com/in/vicentesg/",
         twitter: "",
         facebook: "",
         instagram: ""
@@ -84,14 +101,14 @@ export const config = {
         develop: {
             title: "RESEARCH & HCI",
             description: "Interactive systems & accessibility",
-            details: "Building gaze-tracking demos, HCI prototypes, and accessible tools. Expertise in React, Next.js, MediaPipe, and interactive visualization.",
-            tools: ["React", "Next.js", "TypeScript", "MediaPipe", "Three.js", "GSAP", "Tailwind"]
+            details: "Work in progress: developing an app to support ADHD screening using webcam-based gaze-tracking and AI. The tool aims to make early detection accessible and low-cost—harnessing standard webcams and machine learning to capture attentional signatures that lab-grade eye trackers typically measure, with potential for deployment in schools and remote settings.",
+            tools: ["Gaze-tracking", "WebGazer", "GazeFormer", "Unity", "React", "MediaPipe", "Three.js"]
         },
         design: {
-            title: "FULL-STACK",
-            description: "Web development & applications",
-            details: "Building responsive, performant web applications. Creating seamless experiences with modern UI/UX principles.",
-            tools: ["React", "Next.js", "Node.js", "TypeScript", "Tailwind", "Git"]
+            title: "DIGITAL HEALTH PROJECTS",
+            description: "Community health & accessible tech",
+            details: "Grant awarded December 2025: Nutrition in Augmented Reality—a community science project in Mexico using Augmented Reality (AR) and AI eye-tracking (GazeFormer) to teach nutrition and prevent type 2 diabetes among children and adolescents in Villa Victoria, State of Mexico. Three AR modules on balanced diet, glucose control, and preventive exercise, with culturally adapted content and workshops in schools and community spaces.",
+            tools: ["Augmented Reality", "GazeFormer", "Unity", "Co-design", "Community workshops"]
         }
     }
 };

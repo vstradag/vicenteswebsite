@@ -185,7 +185,7 @@
   position: fixed;
   z-index: 9999999999;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   box-sizing: border-box;
   padding: 20px 0px;
   left: 50%;

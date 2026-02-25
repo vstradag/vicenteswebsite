@@ -10,26 +10,45 @@ const MyWorks = () => {
           ← Back to Home
         </Link>
         <h1>
-          All <span>Works</span>
+          All <span>Publications</span>
         </h1>
-        <p>A collection of all my projects and creations</p>
+        <p>A collection of my publications</p>
       </div>
 
       <div className="myworks-grid">
-        {config.projects.map((project, index) => (
-          <div className="myworks-card" key={project.id} data-cursor="disable">
-            <div className="myworks-card-number">0{index + 1}</div>
-            <div className="myworks-card-image">
-              <img src={project.image} alt={project.title} />
+        {config.projects.map((project) => {
+          const proj = project as { url?: string; results?: string; year?: number };
+          const cardContent = (
+            <>
+              <div className="myworks-card-number">{proj.year ?? ""}</div>
+              <div className="myworks-card-image">
+                <img src={project.image} alt={project.title} />
+              </div>
+              <div className="myworks-card-info">
+                <h3>{project.title}</h3>
+                <p className="myworks-card-category">{project.category}</p>
+                <p className="myworks-card-description">{project.description}</p>
+                <p className="myworks-card-tech">{proj.results ?? project.technologies}</p>
+              </div>
+            </>
+          );
+          return proj.url ? (
+            <a
+              key={project.id}
+              className="myworks-card"
+              href={proj.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="disable"
+            >
+              {cardContent}
+            </a>
+          ) : (
+            <div key={project.id} className="myworks-card" data-cursor="disable">
+              {cardContent}
             </div>
-            <div className="myworks-card-info">
-              <h3>{project.title}</h3>
-              <p className="myworks-card-category">{project.category}</p>
-              <p className="myworks-card-description">{project.description}</p>
-              <p className="myworks-card-tech">{project.technologies}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
