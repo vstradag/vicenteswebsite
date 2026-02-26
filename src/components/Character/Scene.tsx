@@ -17,8 +17,8 @@ const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
   const hoverDivRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef(new THREE.Scene());
-  const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const introTimeoutRef = useRef<number | null>(null);
+  const debounceRef = useRef<number | null>(null);
   const { setLoading } = useLoading();
 
   const [character, setChar] = useState<THREE.Object3D | null>(null);
@@ -67,7 +67,7 @@ const Scene = () => {
           headBone = character.getObjectByName("spine006") || null;
           screenLight = character.getObjectByName("screenlight") || null;
           progress.loaded().then(() => {
-            introTimeoutRef.current = setTimeout(() => {
+            introTimeoutRef.current = window.setTimeout(() => {
               light.turnOnLights();
               animations.startIntro();
             }, 2500);
@@ -86,7 +86,7 @@ const Scene = () => {
       };
       const onTouchStart = (event: TouchEvent) => {
         const element = event.target as HTMLElement;
-        debounceRef.current = setTimeout(() => {
+        debounceRef.current = window.setTimeout(() => {
           element?.addEventListener("touchmove", (e: TouchEvent) =>
             handleTouchMove(e, (x, y) => (mouse = { x, y }))
           );
@@ -129,12 +129,12 @@ const Scene = () => {
       };
       animate();
       return () => {
-        if (introTimeoutRef.current) {
-          clearTimeout(introTimeoutRef.current);
+        if (introTimeoutRef.current !== null) {
+          window.clearTimeout(introTimeoutRef.current);
           introTimeoutRef.current = null;
         }
-        if (debounceRef.current) {
-          clearTimeout(debounceRef.current);
+        if (debounceRef.current !== null) {
+          window.clearTimeout(debounceRef.current);
           debounceRef.current = null;
         }
         scene.clear();
