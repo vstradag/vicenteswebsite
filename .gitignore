@@ -40,3 +40,16 @@ HSR0015-Body-029-Scan-LOD0/
 *.mp4
 *.mov
 *.webm
+
+# Never commit huge scan assets
+HSR0015-Body-029-Scan-LOD0/
+*.obj
+*.mtl
+*.fbx
+*.glb
+*.gltf
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
