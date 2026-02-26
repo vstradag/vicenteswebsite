@@ -27,3 +27,16 @@ dist-ssr
 backup/
 .env
 redoxchess-engine/
+# large 3D assets (do not commit)
+HSR0015-Body-029-Scan-LOD0/
+*.obj
+*.fbx
+*.glb
+*.gltf
+*.exr
+*.hdr
+*.tiff
+*.psd
+*.mp4
+*.mov
+*.webm
