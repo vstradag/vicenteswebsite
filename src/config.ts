@@ -22,7 +22,7 @@ export const config = {
             "I am a researcher and developer working at the intersection of empirical aesthetics, cognition, and applied AI. My academic work focuses on how aesthetic experiences shape human cognition, wellbeing, and health.",
             "I am also interested in how digital and interactive technologies can promote healthier habits at scale. My technical expertise centers on eye tracking and the cognitive mechanisms that drive gaze behavior.",
             "Alongside my research, I design AI-powered tools that turn these insights into practical, engaging applications.",
-            "Curious how this connects? Ask my chatbot to learn more."
+            "Curious how this connects?"
         ]
     },
     experiences: [
