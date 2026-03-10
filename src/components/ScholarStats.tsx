@@ -39,31 +39,27 @@ export function ScholarStats() {
 
   const fetchStats = useCallback(async () => {
     const fallback = config.scholar?.fallback ?? { citations: 0, hIndex: 0, i10Index: 0 };
-    const apply = (data: { citations?: number; hIndex?: number; i10Index?: number }) =>
-      setStats({
-        citations: data.citations ?? fallback.citations,
-        hIndex: data.hIndex ?? fallback.hIndex,
-        i10Index: data.i10Index ?? fallback.i10Index,
-      });
-
-    const apiUrl = config.scholar?.apiUrl;
+    const scholarUrl = config.scholar?.url ?? "";
 
     try {
-      // Hostinger PHP endpoint (vicenteestrada.com/scholar/scholar.php)
-      if (apiUrl) {
-        const res = await fetch(apiUrl, { cache: "no-store" });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.citations != null || data.hIndex != null || data.i10Index != null) {
-            apply(data);
-            setLoading(false);
-            setRefreshing(false);
-            return;
-          }
-        }
+      const params = new URLSearchParams();
+      if (scholarUrl) params.set("url", scholarUrl);
+      params.set("fallback", JSON.stringify(fallback));
+
+      const res = await fetch(`/api/scholar?${params.toString()}`, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setStats({
+          citations: data.citations ?? fallback.citations,
+          hIndex: data.hIndex ?? fallback.hIndex,
+          i10Index: data.i10Index ?? fallback.i10Index,
+        });
+        setLoading(false);
+        setRefreshing(false);
+        return;
       }
     } catch {
-      /* ignore, fall through to fallback */
+      /* fall through to fallback */
     }
 
     setStats(fallback);

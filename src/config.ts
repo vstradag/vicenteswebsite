@@ -12,9 +12,7 @@ export const config = {
     },
     scholar: {
         url: "https://scholar.google.com/citations?user=0YSmKi4AAAAJ&hl=en&oi=ao",
-        // Hostinger PHP endpoint (Option B) – fetches stats via SerpApi
-        apiUrl: "https://vicenteestrada.com/scholar/scholar.php",
-        fallback: { citations: 187, hIndex: 7, i10Index: 6 }
+        fallback: { citations: 190, hIndex: 7, i10Index: 6 }
     },
     about: {
         title: "About Me",

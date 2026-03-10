@@ -1,5 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import About from "./About";
+import ChatWidget from "./ChatWidget";
 import Contact from "./Contact";
 import Cursor from "./Cursor";
 import Landing from "./Landing";
@@ -40,6 +41,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
         <Work />
         <Contact />
       </div>
+      <ChatWidget />
     </div>
   );
 };

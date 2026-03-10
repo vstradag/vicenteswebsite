@@ -33,47 +33,73 @@ function buildSerpApiUrl(authorId, apiKey) {
   return `https://serpapi.com/search.json?${params.toString()}`;
 }
 
-/** Parse SerpApi cited_by.table into { citations, hIndex, i10Index } */
+/** Parse SerpApi cited_by.table into { citations, hIndex, i10Index }.
+ *  Field names are locale-dependent (e.g. h_index in English, indice_h in
+ *  French), so we match keys by pattern instead of exact name. */
 function parseSerpApiCitedBy(citedBy) {
   if (!citedBy?.table || !Array.isArray(citedBy.table)) return null;
   let citations = 0,
     hIndex = 0,
     i10Index = 0;
+
   for (const row of citedBy.table) {
-    if (row.citations?.all != null) citations = parseInt(row.citations.all, 10);
-    if (row.indice_h?.all != null)
-      hIndex = parseInt(row.indice_h.all, 10);
-    else if (row.h_index?.all != null)
-      hIndex = parseInt(row.h_index.all, 10);
-    if (row.indice_i10?.all != null)
-      i10Index = parseInt(row.indice_i10.all, 10);
-    else if (row.i10_index?.all != null)
-      i10Index = parseInt(row.i10_index.all, 10);
+    for (const [key, value] of Object.entries(row)) {
+      if (!value || typeof value !== "object" || value.all == null) continue;
+      const num = parseInt(String(value.all), 10);
+      if (isNaN(num)) continue;
+
+      const k = key.toLowerCase();
+      if (/citation/.test(k)) {
+        citations = num;
+      } else if (/i10|i_10/.test(k)) {
+        i10Index = num;
+      } else if (/\bh\b|h[_-]?ind|ind[a-z]*[_-]?h/.test(k)) {
+        hIndex = num;
+      }
+    }
   }
   return { citations, hIndex, i10Index };
 }
 
-/** Try to parse stats from Scholar HTML (fragile – Google often blocks) */
+/** Try to parse stats from Scholar HTML (fragile – Google often blocks).
+ *  The stats table (#gsc_rsb_st) has three data rows, each with two
+ *  gsc_rsb_std cells: the first is "All", the second is "Since YYYY".
+ *  We only take the first cell (All) from each row. */
 function parseScholarHtml(html, fallback) {
   let citations = fallback.citations;
   let hIndex = fallback.hIndex;
   let i10Index = fallback.i10Index;
 
-  const citedMatch =
-    html.match(/Cited by[\s\S]*?(\d[\d,]*)/i) ||
-    html.match(/gsc_oci_cited_by[\s\S]*?(\d+)/);
-  if (citedMatch) {
-    citations =
-      parseInt(String(citedMatch[1]).replace(/,/g, ""), 10) || fallback.citations;
+  const tableMatch = html.match(/id\s*=\s*"gsc_rsb_st"[\s\S]*?<\/table>/i);
+  if (tableMatch) {
+    const table = tableMatch[0];
+    const rowRe =
+      /<tr[^>]*>[\s\S]*?<td[^>]*class="gsc_rsb_sc1"[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*class="gsc_rsb_std"[^>]*>([\d,]+)<\/td>/gi;
+    let m;
+    while ((m = rowRe.exec(table)) !== null) {
+      const label = m[1].replace(/<[^>]*>/g, "").trim().toLowerCase();
+      const num = parseInt(m[2].replace(/,/g, ""), 10);
+      if (isNaN(num)) continue;
+
+      if (/citation/.test(label)) {
+        citations = num;
+      } else if (/i10/.test(label)) {
+        i10Index = num;
+      } else if (/h.?index/.test(label)) {
+        hIndex = num;
+      }
+    }
+    return { citations, hIndex, i10Index };
   }
 
-  const hMatch =
-    html.match(/h-?index[\s\S]*?(\d+)/i) || html.match(/h_index[\s\S]*?(\d+)/);
+  const citedMatch = html.match(/Citations<\/a><\/td>\s*<td[^>]*>(\d[\d,]*)/i);
+  if (citedMatch)
+    citations = parseInt(citedMatch[1].replace(/,/g, ""), 10) || fallback.citations;
+
+  const hMatch = html.match(/h-?index<\/a><\/td>\s*<td[^>]*>(\d+)/i);
   if (hMatch) hIndex = parseInt(hMatch[1], 10) || fallback.hIndex;
 
-  const i10Match =
-    html.match(/i10-?index[\s\S]*?(\d+)/i) ||
-    html.match(/i10_index[\s\S]*?(\d+)/);
+  const i10Match = html.match(/i10-?index<\/a><\/td>\s*<td[^>]*>(\d+)/i);
   if (i10Match) i10Index = parseInt(i10Match[1], 10) || fallback.i10Index;
 
   return { citations, hIndex, i10Index };

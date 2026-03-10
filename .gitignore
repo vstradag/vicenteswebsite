@@ -53,3 +53,5 @@ HSR0015-Body-029-Scan-LOD0/
 *.jpeg
 *.tif
 *.tiff
+.vercel
+.env*.local
