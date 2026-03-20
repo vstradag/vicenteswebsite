@@ -2,6 +2,42 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChatMessage, sendChatMessage } from "../lib/chatApi";
 import "./styles/ChatWidget.css";
 
+/** Parse text and render URLs + mailto links as clickable. */
+function linkify(text: string): React.ReactNode[] {
+  const urlRegex = /(https?:\/\/[^\s<>"']+|mailto:[^\s<>"']+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+  const parts = text.split(urlRegex);
+  return parts.map((part, i) => {
+    const isWeb = part.startsWith("http://") || part.startsWith("https://");
+    const isMailto = part.startsWith("mailto:");
+    const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(part);
+    if (isWeb) {
+      return (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="chat-link"
+        >
+          {part}
+        </a>
+      );
+    }
+    if (isMailto || isEmail) {
+      const href = isMailto ? part : `mailto:${part}`;
+      const label = isMailto
+        ? part.replace(/^mailto:([^?]+).*/, "$1")
+        : part;
+      return (
+        <a key={i} href={href} className="chat-link chat-link-email">
+          {label}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 function Greeting({
   onSend,
   disabled,
@@ -213,7 +249,7 @@ export default function ChatWidget() {
 
             {messages.map((m, i) => (
               <div key={i} className={`chat-bubble ${m.role}`}>
-                {m.content}
+                {linkify(m.content)}
               </div>
             ))}
 

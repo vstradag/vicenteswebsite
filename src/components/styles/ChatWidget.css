@@ -116,6 +116,16 @@
   border-bottom-left-radius: 4px;
 }
 
+.chat-bubble .chat-link {
+  color: var(--accentColor);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-all;
+}
+.chat-bubble .chat-link:hover {
+  opacity: 0.9;
+}
+
 .chat-bubble.error {
   align-self: center;
   background: rgba(255, 80, 80, 0.15);

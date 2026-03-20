@@ -2,29 +2,87 @@ import Groq from "groq-sdk";
 import { vicenteKnowledge } from "../src/data/vicenteKnowledge.js";
 import { publications, findRelevantPublications } from "../src/data/publications.js";
 
-function isPublicationQuestion(userMessage) {
-  // I detect whether the visitor is probably asking about papers or outputs.
+/** Convert knowledge object to LLM-ready text. Extend when adding new modules. */
+function formatKnowledgeForPrompt(knowledge) {
+  const lines = [];
+
+  if (knowledge.summary) lines.push(`SUMMARY\n${knowledge.summary}\n`);
+
+  if (knowledge.researchAreas?.length)
+    lines.push(
+      `RESEARCH AREAS\n${knowledge.researchAreas.join("; ")}\n`
+    );
+
+  if (knowledge.methods?.length)
+    lines.push(`METHODS & TOOLS\n${knowledge.methods.join("; ")}\n`);
+
+  if (knowledge.roles?.length) {
+    const roleEntries = knowledge.roles.map(
+      (r) =>
+        `- ${r.title}, ${r.institution} (${r.period}, ${r.location}): ${r.description}`
+    );
+    lines.push(`RESEARCH EXPERIENCE\n${roleEntries.join("\n")}\n`);
+  }
+
+  if (knowledge.teaching?.length) {
+    const teachEntries = knowledge.teaching.map(
+      (t) => `- ${t.role}, ${t.institution} (${t.period}): ${t.description}`
+    );
+    lines.push(`TEACHING\n${teachEntries.join("\n")}\n`);
+  }
+
+  if (knowledge.education?.length) {
+    const eduEntries = knowledge.education.map(
+      (e) =>
+        `- ${e.degree}, ${e.institution} (${e.period}). Supervisor: ${e.supervisor}. Thesis: ${e.thesis}`
+    );
+    lines.push(`EDUCATION\n${eduEntries.join("\n")}\n`);
+  }
+
+  if (knowledge.grants?.length) {
+    const grantEntries = knowledge.grants.map((g) => {
+      let s = `- ${g.role}: ${g.name} (${g.period})`;
+      if (g.amount) s += `, ${g.amount}`;
+      if (g.description) s += `. ${g.description}`;
+      return s;
+    });
+    lines.push(`GRANTS & AWARDS\n${grantEntries.join("\n")}\n`);
+  }
+
+  if (knowledge.supervision?.length)
+    lines.push(`SUPERVISION & MENTORSHIP\n${knowledge.supervision.join("\n")}\n`);
+
+  if (knowledge.languages?.length)
+    lines.push(`LANGUAGES\n${knowledge.languages.join("; ")}\n`);
+
+  if (knowledge.collaboration)
+    lines.push(`COLLABORATION\n${knowledge.collaboration}`);
+
+  if (knowledge.contact) {
+    const c = knowledge.contact;
+    lines.push(
+      `CONTACT (always include when discussing collaboration, supervision, or how to reach Vicente)\n` +
+        `Email: ${c.email}\n` +
+        `Send proposal (click to open email): ${c.mailtoProposal}\n` +
+        `LinkedIn: ${c.linkedin}\n` +
+        `Portfolio: ${c.portfolio}`
+    );
+  }
+
+  return lines.join("\n").trim();
+}
+
+/** Broader triggers: research, work, projects, interests, etc. */
+function shouldInjectPublicationContext(userMessage) {
   const q = userMessage.toLowerCase();
-
   const triggers = [
-    "paper",
-    "papers",
-    "publication",
-    "publications",
-    "publish",
-    "published",
-    "journal",
-    "doi",
-    "article",
-    "articles",
-    "thesis",
-    "chapter",
-    "study",
-    "studies",
-    "work on",
-    "wrote about"
+    "paper", "papers", "publication", "publications", "publish", "published",
+    "journal", "doi", "article", "articles", "thesis", "chapter",
+    "study", "studies", "work on", "wrote about",
+    "research", "researches", "researcher", "focus", "focuses",
+    "interest", "interests", "project", "projects",
+    "key publication", "key publications", "eye-tracking", "collaboration",
   ];
-
   return triggers.some((term) => q.includes(term));
 }
 
@@ -78,14 +136,14 @@ export default async function handler(req, res) {
     const lastUserMessage =
       [...messages].reverse().find((m) => m?.role === "user")?.content?.trim() || "";
 
-    const publicationContext = isPublicationQuestion(lastUserMessage)
+    const publicationContext = shouldInjectPublicationContext(lastUserMessage)
       ? formatPublicationContext(lastUserMessage)
       : "";
 
     const systemPrompt = `You are Vicente's Research Assistant.
 
 Base knowledge about Vicente:
-${vicenteKnowledge}
+${formatKnowledgeForPrompt(vicenteKnowledge)}
 
 ${
   publicationContext
@@ -96,11 +154,11 @@ ${publicationContext}`
 
 Rules:
 - Be concise, clear, and helpful.
-- Answer using the provided knowledge first.
-- When discussing a publication, mention its title and DOI URL when available.
-- Do not invent papers, DOIs, journals, affiliations, dates, or results.
-- If the answer is not supported by the provided knowledge, say so clearly.
-- If useful, suggest that the visitor check Vicente's Google Scholar or website for more.`;
+- Answer directly from the provided knowledge. Never say that "the knowledge is empty", "the provided knowledge does not specify", "I don't have information", or similar disclaimers about missing knowledge.
+- When something is not covered, give the best answer you can from related context, then invite the visitor to check Vicente's Google Scholar (scholar.google.com/citations?user=0YSmKi4AAAAJ) or website (vicenteestrada.com) for more.
+- When discussing a publication, use only the exact DOI URL provided in the publication context. If "DOI URL: not available" is shown, do not invent or guess a link; simply mention the title and suggest checking Google Scholar for the latest.
+- When discussing collaboration opportunities, ALWAYS include: (1) Vicente's email vicente.estrada.go@gmail.com, (2) the mailto link mailto:vicente.estrada.go@gmail.com?subject=Collaboration%20Proposal so visitors can click to open their email client with a proposal subject, and (3) LinkedIn https://www.linkedin.com/in/vicentesg/. Invite them to send a proposal.
+- Do not invent papers, DOIs, journals, affiliations, dates, or results.`;
 
     const groq = new Groq({ apiKey });
 

@@ -260,17 +260,17 @@ export const publications = [
     },
     {
       title: "Murals and Neighborhoods: Public Art and Well-Being",
-      year: 2024,
-      status: "published",
+      year: 2025,
+      status: "preprint",
       type: "article",
       authors: [
         "Vicente Estrada Gonzalez",
         "Eileen R. Cardillo",
         "Anjan Chatterjee",
       ],
-      journal: "Frontiers in Psychology",
-      doi: "10.3389/fpsyg.2024.1247",
-      doiUrl: "https://doi.org/10.3389/fpsyg.2024.1247",
+      journal: "SSRN (preprint)",
+      doi: "10.2139/ssrn.5177490",
+      doiUrl: "https://doi.org/10.2139/ssrn.5177490",
       summary:
         "This study examined how public murals influence aesthetic and emotional responses across different neighborhoods in Philadelphia. Participants evaluated murals in areas with varying socioeconomic characteristics. Results showed that murals consistently elicited positive aesthetic responses such as liking and beauty across locations, while deeper impacts such as immersion and perceived transformation varied depending on the neighborhood context. The findings highlight how environmental context shapes the intensity and meaning of aesthetic experiences in public spaces.",
       topics: [
@@ -286,7 +286,7 @@ export const publications = [
     {
       title: "Engaging with Art in the Wild at the Barnes Foundation: Mobile Eye-Tracking in a Museum",
       year: 2023,
-      status: "published",
+      status: "submitted",
       type: "article",
       authors: [
         "Vicente Estrada Gonzalez",
@@ -294,8 +294,8 @@ export const publications = [
         "Anjan Chatterjee",
       ],
       journal: "Frontiers in Psychology",
-      doi: "10.3389/fpsyg.2023.XXXX",
-      doiUrl: "https://doi.org/10.3389/fpsyg.2023.XXXX",
+      doi: null,
+      doiUrl: null,
       summary:
         "This study used mobile eye-tracking to investigate how visitors naturally engage with artworks inside a museum environment. Participants explored galleries at the Barnes Foundation while their gaze behavior was recorded. The results revealed substantial variability in viewing patterns across individuals and artworks, highlighting the dynamic nature of aesthetic engagement in real-world settings. The work demonstrates the value of mobile eye-tracking for studying art perception outside controlled laboratory environments.",
       topics: [
@@ -311,7 +311,7 @@ export const publications = [
     {
       title: "Going Beyond Beauty: Characterizing the Complexity of Aesthetic Experiences",
       year: 2026,
-      status: "published",
+      status: "in press",
       type: "article",
       authors: [
         "Vicente Estrada Gonzalez",
@@ -322,8 +322,8 @@ export const publications = [
         "Anjan Chatterjee",
       ],
       journal: "Annals of the New York Academy of Sciences",
-      doi: "10.1111/nyas.70246",
-      doiUrl: "https://doi.org/10.1111/nyas.70246",
+      doi: null,
+      doiUrl: null,
       summary:
         "This study examined how different dimensions of aesthetic experience vary in agreement across individuals. Using a taxonomy of emotional and cognitive impacts—including positive affect, negative affect, immersion, and epistemic transformation—participants rated artworks presented in both museum and digital contexts. Agreement was highest for simple aesthetic judgments such as liking and beauty, while higher-order cognitive impacts showed greater variability. The results suggest that complex aesthetic experiences involve multiple interacting psychological processes beyond traditional beauty judgments.",
       topics: [
