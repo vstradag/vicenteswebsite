@@ -23,9 +23,10 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {children}
       <div className="container-main">
-        <Landing />
+        <Landing>
+          {children}
+        </Landing>
         <About />
         <WhatIDo />
         <Work />

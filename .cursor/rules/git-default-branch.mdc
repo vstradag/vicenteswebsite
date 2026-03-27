@@ -1,0 +1,10 @@
+---
+description: Default Git branch for this repo (Vercel / production)
+alwaysApply: true
+---
+
+# Git: use `lightweight`
+
+- **Production deploy branch:** `lightweight` (not `main`).
+- When committing, pushing, or merging PRs for this project, **use `lightweight`** unless the user explicitly asks otherwise.
+- After work on `main` or another branch, **merge into `lightweight` and push `origin lightweight`** so the live site updates.
