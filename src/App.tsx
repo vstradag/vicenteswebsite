@@ -5,24 +5,13 @@ import "./App.css";
 
 const CharacterModel = lazy(() => import("./components/Character"));
 const MainContainer = lazy(() => import("./components/MainContainer"));
-const MobileMain = lazy(() => import("./components/MobileMain"));
 const MyWorks = lazy(() => import("./pages/MyWorks"));
 const Artwork = lazy(() => import("./pages/Artwork"));
 const Play = lazy(() => import("./pages/Play"));
 import { LoadingProvider } from "./context/LoadingProvider";
-import { useIsMobile } from "./hooks/useIsMobile";
 
+/** Single home layout for all viewports: same MainContainer + WebGL character (mobile CSS handles layout). */
 function HomePage() {
-  const isMobile = useIsMobile();
-  if (isMobile) {
-    return (
-      <LoadingProvider>
-        <Suspense fallback={null}>
-          <MobileMain />
-        </Suspense>
-      </LoadingProvider>
-    );
-  }
   return (
     <LoadingProvider>
       <Suspense fallback={null}>

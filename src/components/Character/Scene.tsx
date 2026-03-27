@@ -13,10 +13,28 @@ import {
 import setAnimations from "./utils/animationUtils";
 import { setProgress } from "../Loading";
 
+/** Avoid 0×0 canvas on mobile when layout has not run yet. */
+function readCharacterContainerSize(el: HTMLElement) {
+  const r = el.getBoundingClientRect();
+  let w = r.width;
+  let h = r.height;
+  if (w < 2) w = el.clientWidth || window.innerWidth;
+  if (h < 2) {
+    h =
+      el.clientHeight ||
+      Math.max(280, Math.round(window.innerHeight * 0.42));
+  }
+  return {
+    width: Math.max(2, Math.floor(w)),
+    height: Math.max(2, Math.floor(h)),
+  };
+}
+
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
   const hoverDivRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef(new THREE.Scene());
+  const characterRef = useRef<THREE.Object3D | null>(null);
   const introTimeoutRef = useRef<number | null>(null);
   const debounceRef = useRef<number | null>(null);
   const { setLoading } = useLoading();
@@ -24,9 +42,10 @@ const Scene = () => {
   const [, setChar] = useState<THREE.Object3D | null>(null);
   useEffect(() => {
     let onResize: (() => void) | null = null;
+    let resizeObserver: ResizeObserver | null = null;
     if (canvasDiv.current) {
-      let rect = canvasDiv.current.getBoundingClientRect();
-      let container = { width: rect.width, height: rect.height };
+      const el = canvasDiv.current;
+      let container = readCharacterContainerSize(el);
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
 
@@ -63,6 +82,7 @@ const Scene = () => {
           hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
           mixer = animations.mixer;
           let character = gltf.scene;
+          characterRef.current = character;
           setChar(character);
           scene.add(character);
           headBone = character.getObjectByName("spine006") || null;
@@ -78,6 +98,20 @@ const Scene = () => {
           window.addEventListener("resize", onResize);
         }
       });
+
+      resizeObserver = new ResizeObserver(() => {
+        if (!canvasDiv.current) return;
+        const { width, height } = readCharacterContainerSize(canvasDiv.current);
+        if (width < 2 || height < 2) return;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        const ch = characterRef.current;
+        if (ch) {
+          handleResize(renderer, camera, canvasDiv, ch);
+        }
+      });
+      resizeObserver.observe(el);
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.15, y: 0.25 };  // Smoother, gentler tracking
@@ -143,6 +177,8 @@ const Scene = () => {
       };
       animate();
       return () => {
+        characterRef.current = null;
+        resizeObserver?.disconnect();
         if (introTimeoutRef.current !== null) {
           window.clearTimeout(introTimeoutRef.current);
           introTimeoutRef.current = null;

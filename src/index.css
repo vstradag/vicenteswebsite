@@ -57,6 +57,12 @@ body {
     position: static !important;
     height: auto !important;
   }
+
+  /* Custom cursor is desktop-only; touch devices use system cursor */
+  .cursor-main {
+    display: none !important;
+    pointer-events: none !important;
+  }
 }
 
 a {
