@@ -1,0 +1,10 @@
+/* Dedicated mobile shell: no 3D canvas, touch-friendly flow */
+.mobile-main {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.mobile-main-inner {
+  position: relative;
+  z-index: 1;
+}

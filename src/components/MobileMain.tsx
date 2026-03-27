@@ -1,30 +1,32 @@
-import { PropsWithChildren, useEffect } from "react";
+import { useEffect } from "react";
 import About from "./About";
 import ChatWidget from "./ChatWidget";
 import Contact from "./Contact";
-import Cursor from "./Cursor";
 import Landing from "./Landing";
 import Navbar from "./Navbar";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import "./styles/MobileMain.css";
 
-const MainContainer = ({ children }: PropsWithChildren) => {
+/**
+ * Phone layout: same sections as desktop, no WebGL character, no custom cursor.
+ * Loaded only when viewport ≤ 768px (see App.tsx).
+ */
+const MobileMain = () => {
   useEffect(() => {
-    const resizeHandler = () => setSplitText();
-    resizeHandler();
-    window.addEventListener("resize", resizeHandler);
-    return () => window.removeEventListener("resize", resizeHandler);
+    const onResize = () => setSplitText();
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (
-    <div className="container-main">
-      <Cursor />
+    <div className="container-main mobile-main">
       <Navbar />
       <SocialIcons />
-      {children}
-      <div className="container-main">
+      <div className="mobile-main-inner">
         <Landing />
         <About />
         <WhatIDo />
@@ -36,4 +38,4 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   );
 };
 
-export default MainContainer;
+export default MobileMain;
