@@ -26,7 +26,7 @@ const Landing = ({ children }: PropsWithChildren) => {
               <div className="landing-h2-1">{config.developer.title}</div>
             </h2>
           </div>
-          {/* Mobile photo - shows only on mobile when 3D character is hidden */}
+          {/* Fallback photo when 3D is unavailable; hidden when WebGL character shows */}
           <div className="mobile-photo">
             <img src="/images/headshot.png" alt={config.developer.fullName} />
           </div>
