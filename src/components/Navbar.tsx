@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -32,15 +33,18 @@ const Navbar = () => {
     }
     requestAnimationFrame(raf);
 
-    // Handle navigation links
-    let links = document.querySelectorAll(".header ul a");
+    // Handle navigation links (hash anchors only; /routes use normal navigation)
+    const links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
+      const element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
+        const href = element.getAttribute("href") || "";
+        if (href.startsWith("/") && href !== "/" && !href.includes("#")) {
+          return;
+        }
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
+          const section = element.getAttribute("data-href");
           if (section && lenis) {
             const target = document.querySelector(section) as HTMLElement;
             if (target) {
@@ -81,6 +85,11 @@ const Navbar = () => {
             <a data-href="#work" href="#work">
               <HoverLinks text="WORK" />
             </a>
+          </li>
+          <li>
+            <Link to="/artwork" data-cursor="disable">
+              <HoverLinks text="ARTWORK" />
+            </Link>
           </li>
           <li>
             <a data-href="#contact" href="#contact">

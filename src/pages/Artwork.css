@@ -1,0 +1,27 @@
+.artwork-page .artwork-header {
+  margin-bottom: 40px;
+}
+
+.artwork-under-construction {
+  font-size: 22px !important;
+  color: var(--accentColor) !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+}
+
+.artwork-hint {
+  font-size: 16px !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  max-width: 480px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  line-height: 1.6 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .artwork-under-construction {
+    font-size: 18px !important;
+  }
+}
