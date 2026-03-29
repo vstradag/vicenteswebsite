@@ -55,3 +55,6 @@ HSR0015-Body-029-Scan-LOD0/
 *.tiff
 .vercel
 .env*.local
+
+# Optional local copy of the gaze piece (production uses external URL; folder is huge)
+public/superficial-tension/

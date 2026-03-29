@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ARTWORK_SLUGS, getArtworkTitle } from "../data/artworks";
+import type { ArtworkSlug } from "../data/artworks";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -9,7 +11,22 @@ import "./styles/Navbar.css";
 gsap.registerPlugin(ScrollTrigger);
 export let lenis: Lenis | null = null;
 
+function useCoarsePointer() {
+  const [coarse, setCoarse] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none)");
+    const sync = () => setCoarse(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return coarse;
+}
+
 const Navbar = () => {
+  const [artworkMenuOpen, setArtworkMenuOpen] = useState(false);
+  const coarsePointer = useCoarsePointer();
+
   useEffect(() => {
     // Initialize Lenis smooth scroll
     lenis = new Lenis({
@@ -86,10 +103,35 @@ const Navbar = () => {
               <HoverLinks text="WORK" />
             </a>
           </li>
-          <li>
-            <Link to="/artwork" data-cursor="disable">
+          <li
+            className={`nav-artwork-dropdown${artworkMenuOpen ? " nav-artwork-dropdown--open" : ""}`}
+            onMouseLeave={() => {
+              if (!coarsePointer) setArtworkMenuOpen(false);
+            }}
+          >
+            <span
+              className="nav-artwork-trigger"
+              role="presentation"
+              onClick={() => {
+                if (coarsePointer) setArtworkMenuOpen((o) => !o);
+              }}
+            >
               <HoverLinks text="ARTWORK" />
-            </Link>
+            </span>
+            <ul className="nav-artwork-submenu" role="menu">
+              {ARTWORK_SLUGS.map((slug: ArtworkSlug) => (
+                <li key={slug} role="none">
+                  <Link
+                    role="menuitem"
+                    to={`/artwork/${slug}`}
+                    data-cursor="disable"
+                    onClick={() => setArtworkMenuOpen(false)}
+                  >
+                    {getArtworkTitle(slug)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </li>
           <li>
             <a data-href="#contact" href="#contact">

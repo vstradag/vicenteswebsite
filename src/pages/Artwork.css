@@ -1,27 +1,51 @@
-.artwork-page .artwork-header {
-  margin-bottom: 40px;
-}
-
-.artwork-under-construction {
-  font-size: 22px !important;
-  color: var(--accentColor) !important;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 24px !important;
-  margin-bottom: 16px !important;
-}
-
-.artwork-hint {
+/* /artwork index */
+.artwork-page--index .artwork-index-lead {
   font-size: 16px !important;
   color: rgba(255, 255, 255, 0.55) !important;
   max-width: 480px;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  margin: 16px auto 32px !important;
   line-height: 1.6 !important;
 }
 
-@media only screen and (max-width: 768px) {
-  .artwork-under-construction {
-    font-size: 18px !important;
-  }
+.artwork-index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.artwork-index-link {
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  color: var(--accentColor);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.artwork-index-link:hover {
+  border-bottom-color: var(--accentColor);
+  color: #fff;
+}
+
+/* Fullscreen piece: /artwork/:slug */
+.artwork-piece-full {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  z-index: 1;
+}
+
+.artwork-piece-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  margin: 0;
+  padding: 0;
 }

@@ -30,6 +30,99 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+/* ARTWORK: label is not a link; submenu on hover (desktop) or tap (coarse) */
+.nav-artwork-dropdown {
+  position: relative;
+  z-index: 10002;
+}
+
+.nav-artwork-trigger {
+  display: inline-block;
+  cursor: default;
+  user-select: none;
+}
+
+.nav-artwork-submenu {
+  position: absolute;
+  /* Flush to trigger — no gap — so pointer never leaves .nav-artwork-dropdown */
+  top: 100%;
+  right: 0;
+  margin: 0;
+  /* Top padding is inside the hit box (invisible bridge from ARTWORK to items) */
+  padding: 10px 0 8px;
+  list-style: none;
+  min-width: 11rem;
+  background: rgba(12, 12, 14, 0.96);
+  border: 1px solid rgba(180, 160, 200, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  /* Don’t transition visibility — it can block clicks mid-hover */
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+/* Invisible strip above the panel so the path from “ARTWORK” stays hoverable */
+.nav-artwork-submenu::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 12px;
+}
+
+.nav-artwork-submenu li {
+  margin: 0;
+  padding: 0;
+  cursor: default;
+}
+
+.nav-artwork-submenu a {
+  display: block;
+  padding: 10px 18px;
+  color: #eae5ec;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-artwork-submenu a:hover {
+  background: rgba(180, 140, 220, 0.12);
+  color: #fff;
+}
+
+@media (hover: hover) {
+  .nav-artwork-dropdown:hover .nav-artwork-submenu,
+  .nav-artwork-dropdown:focus-within .nav-artwork-submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+}
+
+@media (hover: none) {
+  .nav-artwork-dropdown.nav-artwork-dropdown--open .nav-artwork-submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-artwork-trigger {
+    cursor: pointer;
+  }
+}
 .navbar-connect {
   position: absolute;
   display: none;
