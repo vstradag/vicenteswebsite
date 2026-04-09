@@ -17,9 +17,10 @@ function resolveSuperficialTensionEmbedUrl(): string {
   const raw = import.meta.env.VITE_SUPERFICIAL_TENSION_URL?.trim();
   if (raw === "same-origin" || raw === "local") {
     const base = import.meta.env.BASE_URL.replace(/\/$/, "") || "";
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
-    return `${origin}${base}/superficial-tension/`;
+    // Root-relative URL so the iframe always matches this page's host (e.g. 192.168.x.x
+    // with `vite --host`). Building with window.location.origin breaks on LAN / other devices
+    // because `localhost` in the iframe would point at the wrong machine.
+    return `${base}/superficial-tension/index.html`;
   }
   if (raw) {
     return raw.endsWith("/") ? raw : `${raw}/`;
