@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "sync:superficial-tension": "bash scripts/sync-superficial-tension.sh",
     "dev": "vite --host",
     "api": "vercel dev",
     "dev:all": "concurrently \"npm run dev\" \"npm run api\"",

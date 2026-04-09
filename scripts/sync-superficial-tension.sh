@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
-# Copy the superficialTension static piece into public/superficial-tension/ for Vite.
-# Default source: sibling folder websiteOtherFiles/superficialTension (adjust SUPERFICIAL_TENSION_SRC).
+# Copy the static Superficial Tension build into public/superficial-tension/ for local
+# dev or same-origin iframe (VITE_SUPERFICIAL_TENSION_URL=same-origin).
+# The portfolio .gitignore excludes this folder (large JPG/MP4); production usually
+# embeds https://superficial-tension.vercel.app/ instead.
 set -euo pipefail
-
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 DEST="$ROOT/public/superficial-tension"
-DEFAULT_SRC="$(cd "$ROOT/../websiteOtherFiles/superficialTension" 2>/dev/null && pwd || true)"
-SUPERFICIAL_TENSION_SRC="${SUPERFICIAL_TENSION_SRC:-$DEFAULT_SRC}"
+SRC="${SUPERFICIAL_TENSION_ROOT:-$HOME/Desktop/websiteOtherFiles/superficialTension}"
 
-if [[ -z "$SUPERFICIAL_TENSION_SRC" || ! -d "$SUPERFICIAL_TENSION_SRC" ]]; then
-  echo "Set SUPERFICIAL_TENSION_SRC to your superficialTension project root (folder with index.html)." >&2
+if [[ ! -f "$SRC/index.html" ]]; then
+  echo "Expected $SRC/index.html — set SUPERFICIAL_TENSION_ROOT to your superficialTension repo." >&2
   exit 1
 fi
 
 mkdir -p "$DEST"
-echo "Syncing: $SUPERFICIAL_TENSION_SRC -> $DEST"
 rsync -a --delete \
-  --exclude='.git' \
-  --exclude='node_modules' \
-  --exclude='.DS_Store' \
-  --exclude='.gitignore' \
-  "$SUPERFICIAL_TENSION_SRC/" "$DEST/"
+  --exclude '.git' \
+  --exclude '.vercel' \
+  --exclude 'node_modules' \
+  --exclude '.DS_Store' \
+  "$SRC/" "$DEST/"
 
-echo "Done. Run: npm run build"
+echo "Synced to $DEST"
+echo "Use VITE_SUPERFICIAL_TENSION_URL=same-origin in .env.local and npm run dev"
