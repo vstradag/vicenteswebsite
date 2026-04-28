@@ -18,6 +18,12 @@ const setLighting = (scene: THREE.Scene) => {
   pointLight.castShadow = true;
   scene.add(pointLight);
 
+  // Fill the workstation props with green so the desk and monitor edges do not
+  // keep picking up the original magenta ambience as strongly.
+  const workstationLight = new THREE.PointLight(0x61f08b, 0, 40, 2);
+  workstationLight.position.set(-2.4, 8.9, 4.6);
+  scene.add(workstationLight);
+
   new RGBELoader()
     .setPath("/models/")
     .load("char_enviorment.hdr", function (texture) {
@@ -30,8 +36,10 @@ const setLighting = (scene: THREE.Scene) => {
   function setPointLight(screenLight: any) {
     if (screenLight.material.opacity > 0.9) {
       pointLight.intensity = screenLight.material.emissiveIntensity * 20;
+      workstationLight.intensity = 3.2;
     } else {
       pointLight.intensity = 0;
+      workstationLight.intensity = 0;
     }
   }
   const duration = 2;
