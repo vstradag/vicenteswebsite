@@ -35,7 +35,24 @@ const setCharacter = (
                 child.receiveShadow = false;
                 mesh.frustumCulled = true;
                 if (mesh.material && !Array.isArray(mesh.material)) {
-                  (mesh.material as THREE.ShaderMaterial).precision = 'mediump';
+                  const material = mesh.material as THREE.MeshStandardMaterial;
+                  (material as THREE.ShaderMaterial).precision = "mediump";
+
+                  // The GLB ships with a reflective HDR setup and an internal
+                  // "screenlight" emissive mesh. Re-tint both in code so the
+                  // homepage character follows the Matrix palette instead of
+                  // the model's original magenta accents.
+                  if ("envMapIntensity" in material) {
+                    material.envMapIntensity = 0.18;
+                  }
+
+                  const materialName = material.name?.toLowerCase() ?? "";
+                  const meshName = mesh.name?.toLowerCase() ?? "";
+                  if (materialName.includes("screenlight") || meshName.includes("glass")) {
+                    material.color = new THREE.Color(0x61f08b);
+                    material.emissive = new THREE.Color(0x61f08b);
+                    material.emissiveIntensity = 2.4;
+                  }
                 }
               }
             });

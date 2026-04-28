@@ -38,7 +38,10 @@ const setLighting = (scene: THREE.Scene) => {
   const ease = "power2.inOut";
   function turnOnLights() {
     gsap.to(scene, {
-      environmentIntensity: 0.64,
+      // Keep some HDR reflections for shape, but tone them down because the
+      // bundled environment carries magenta highlights that clash with the
+      // green homepage palette.
+      environmentIntensity: 0.24,
       duration: duration,
       ease: ease,
     });
