@@ -105,6 +105,7 @@ export default function ChatWidget() {
     "Chat with me",
     "Ask about my research",
     "Explore my work",
+    "Ask me anything",
   ];
   const [promptIndex, setPromptIndex] = useState(0);
 
