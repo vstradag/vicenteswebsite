@@ -83,13 +83,12 @@
     margin: 0;
   }
 
-  /* Ensure name parts display correctly */
-  .landing-intro h1 br {
+  .landing-name-line {
     display: block;
-    /* Keep break on mobile for 2 lines, or use display:none for 1 line */
-    content: " ";
-    /* Fallback */
-    margin-bottom: 5px;
+  }
+
+  .landing-name-line + .landing-name-line {
+    margin-top: 5px;
   }
 
   /* Subtitles Container */
@@ -255,9 +254,11 @@
   width: 400px;
   height: 400px;
   z-index: 1;
-  background-color: rgba(80, 230, 121, 0.78);
+  background-color: rgba(97, 240, 139, 0.9);
   transform: translate(-50%, 36%) scaleX(1.4);
-  box-shadow: inset 66px 35px 85px 0px rgba(2, 73, 29, 0.72);
+  box-shadow:
+    inset 66px 35px 85px 0px rgba(10, 110, 43, 0.76),
+    0 0 80px rgba(97, 240, 139, 0.38);
   filter: blur(50px);
   border-radius: 50%;
   top: 50%;
@@ -353,6 +354,17 @@
   font-family: "Geist", sans-serif;
 }
 
+.landing-name {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.landing-name-line {
+  display: block;
+  white-space: nowrap;
+}
+
 /* .landing-intro h1 span {
    font-weight: 200; 
 } */
@@ -414,7 +426,8 @@ h2.landing-info-h2 {
 .landing-h2-1 {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 0.2em;
+  column-gap: 0.2em;
+  row-gap: 0.05em;
   text-shadow: none;
   transform: none;
 }
@@ -523,6 +536,10 @@ h2.landing-info-h2 {
     transform: translate(0%, -50%);
     right: auto;
     left: 66%;
+  }
+
+  .landing-name {
+    align-items: flex-start;
   }
 }
 

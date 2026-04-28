@@ -16,17 +16,16 @@ const Landing = ({ children }: PropsWithChildren) => {
       <div className="landing-section" id="landingDiv">
         <div className="landing-container">
           <div className="landing-intro">
-            <h1>
-              {firstLine.toUpperCase()}
-              <br />
-              <span>{secondLine.toUpperCase()}</span>
+            <h1 className="landing-name">
+              <span className="landing-name-line">{firstLine.toUpperCase()}</span>
+              <span className="landing-name-line">{secondLine.toUpperCase()}</span>
             </h1>
             <ScholarStats />
           </div>
           <div className="landing-info">
             <h2 className="landing-info-h2">
               <div className="landing-h2-1">
-                <span>{titleLead ?? config.developer.title}</span>
+                <span>{titleLead ? `${titleLead} and` : config.developer.title}</span>
                 {titleAccent ? <span className="landing-h2-accent"> {titleAccent}</span> : null}
               </div>
             </h2>

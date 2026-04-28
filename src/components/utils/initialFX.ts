@@ -14,7 +14,7 @@ export function initialFX() {
     delay: 1,
   });
 
-  const selectors = [".landing-info h3", ".landing-intro h2", ".landing-intro h1"];
+  const selectors = [".landing-info h3", ".landing-intro h2"];
   const elements = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
   var landingText = new TextSplitter(elements, {
     type: "chars,lines",
@@ -30,6 +30,19 @@ export function initialFX() {
       ease: "power3.inOut",
       y: 0,
       stagger: 0.025,
+      delay: 0.3,
+    }
+  );
+  gsap.fromTo(
+    ".landing-name-line",
+    { opacity: 0, y: 60, filter: "blur(5px)" },
+    {
+      opacity: 1,
+      duration: 1.1,
+      filter: "blur(0px)",
+      ease: "power3.inOut",
+      y: 0,
+      stagger: 0.12,
       delay: 0.3,
     }
   );
