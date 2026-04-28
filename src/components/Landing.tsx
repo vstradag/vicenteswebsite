@@ -2,11 +2,13 @@ import { PropsWithChildren } from "react";
 import "./styles/Landing.css";
 import { config } from "../config";
 import { ScholarStats } from "./ScholarStats";
+import { getDeveloperNameLines } from "../lib/developerName";
 
 const Landing = ({ children }: PropsWithChildren) => {
-  const nameParts = config.developer.fullName.split(" ");
-  const firstName = nameParts[0] || config.developer.name;
-  const lastName = nameParts.slice(1).join(" ") || "";
+  const { firstLine, secondLine } = getDeveloperNameLines(
+    config.developer.fullName,
+    config.developer.name
+  );
 
   return (
     <>
@@ -14,10 +16,9 @@ const Landing = ({ children }: PropsWithChildren) => {
         <div className="landing-container">
           <div className="landing-intro">
             <h1>
-              {firstName.toUpperCase()}
-              {' '}
+              {firstLine.toUpperCase()}
               <br />
-              {lastName && <span>{lastName.toUpperCase()}</span>}
+              <span>{secondLine.toUpperCase()}</span>
             </h1>
             <ScholarStats />
           </div>

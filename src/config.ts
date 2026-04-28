@@ -12,7 +12,7 @@ export const config = {
     },
     scholar: {
         url: "https://scholar.google.com/citations?user=0YSmKi4AAAAJ&hl=en&oi=ao",
-        fallback: { citations: 190, hIndex: 7, i10Index: 6 }
+        fallback: { citations: 0, hIndex: 0, i10Index: 0 }
     },
     about: {
         title: "About Me",

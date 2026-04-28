@@ -1,3 +1,6 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
 /**
  * Google Scholar stats pipeline
  *
@@ -69,6 +72,7 @@ function parseScholarHtml(html, fallback) {
   let citations = fallback.citations;
   let hIndex = fallback.hIndex;
   let i10Index = fallback.i10Index;
+  let matched = false;
 
   const tableMatch = html.match(/id\s*=\s*"gsc_rsb_st"[\s\S]*?<\/table>/i);
   if (tableMatch) {
@@ -83,26 +87,69 @@ function parseScholarHtml(html, fallback) {
 
       if (/citation/.test(label)) {
         citations = num;
+        matched = true;
       } else if (/i10/.test(label)) {
         i10Index = num;
+        matched = true;
       } else if (/h.?index/.test(label)) {
         hIndex = num;
+        matched = true;
       }
     }
-    return { citations, hIndex, i10Index };
+    return { stats: { citations, hIndex, i10Index }, matched };
   }
 
   const citedMatch = html.match(/Citations<\/a><\/td>\s*<td[^>]*>(\d[\d,]*)/i);
-  if (citedMatch)
+  if (citedMatch) {
     citations = parseInt(citedMatch[1].replace(/,/g, ""), 10) || fallback.citations;
+    matched = true;
+  }
 
   const hMatch = html.match(/h-?index<\/a><\/td>\s*<td[^>]*>(\d+)/i);
-  if (hMatch) hIndex = parseInt(hMatch[1], 10) || fallback.hIndex;
+  if (hMatch) {
+    hIndex = parseInt(hMatch[1], 10) || fallback.hIndex;
+    matched = true;
+  }
 
   const i10Match = html.match(/i10-?index<\/a><\/td>\s*<td[^>]*>(\d+)/i);
-  if (i10Match) i10Index = parseInt(i10Match[1], 10) || fallback.i10Index;
+  if (i10Match) {
+    i10Index = parseInt(i10Match[1], 10) || fallback.i10Index;
+    matched = true;
+  }
+
+  return { stats: { citations, hIndex, i10Index }, matched };
+}
+
+function normalizeStats(data) {
+  if (!data || typeof data !== "object") return null;
+
+  const citations = Number.parseInt(String(data.citations ?? ""), 10);
+  const hIndex = Number.parseInt(String(data.hIndex ?? ""), 10);
+  const i10Index = Number.parseInt(String(data.i10Index ?? ""), 10);
+
+  if ([citations, hIndex, i10Index].some((value) => Number.isNaN(value))) {
+    return null;
+  }
 
   return { citations, hIndex, i10Index };
+}
+
+async function readStaticScholarStats() {
+  try {
+    const filePath = path.join(process.cwd(), "public", "scholar-stats.json");
+    const raw = await fs.readFile(filePath, "utf8");
+    return normalizeStats(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
+
+function buildResponse(stats, source, extra = {}) {
+  return {
+    ...stats,
+    source,
+    ...extra,
+  };
 }
 
 export default async function handler(req, res) {
@@ -110,12 +157,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  res.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
+
   const query = req.query || {};
   const scholarUrl = query.url || DEFAULT_SCHOLAR_URL;
   let fallback = { citations: 0, hIndex: 0, i10Index: 0 };
   try {
     if (query.fallback) fallback = JSON.parse(query.fallback);
   } catch (_) {}
+
+  const staticStats = await readStaticScholarStats();
+  if (staticStats) {
+    fallback = staticStats;
+  }
 
   const apiKey = process.env.SERPAPI_KEY;
 
@@ -134,12 +188,7 @@ export default async function handler(req, res) {
         } else if (data.cited_by) {
           const parsed = parseSerpApiCitedBy(data.cited_by);
           if (parsed) {
-            return res.status(200).json({
-              citations: parsed.citations,
-              hIndex: parsed.hIndex,
-              i10Index: parsed.i10Index,
-              source: "serpapi",
-            });
+            return res.status(200).json(buildResponse(parsed, "serpapi"));
           }
         }
       } catch (err) {
@@ -162,18 +211,14 @@ export default async function handler(req, res) {
     if (response.ok) {
       const html = await response.text();
       const parsed = parseScholarHtml(html, fallback);
-      return res.status(200).json({
-        ...parsed,
-        source: parsed.citations || parsed.hIndex || parsed.i10Index ? "html" : "fallback",
-      });
+      if (parsed.matched) {
+        return res.status(200).json(buildResponse(parsed.stats, "html"));
+      }
     }
   } catch (err) {
     console.warn("Scholar direct fetch failed:", err.message);
   }
 
   // --- 3. Fallback ---
-  return res.status(200).json({
-    ...fallback,
-    source: "fallback",
-  });
+  return res.status(200).json(buildResponse(fallback, staticStats ? "static" : "fallback"));
 }

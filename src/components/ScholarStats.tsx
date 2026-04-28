@@ -4,6 +4,12 @@ import { useEffect, useState, useCallback } from "react";
 import { config } from "../config";
 import "./styles/ScholarStats.css";
 
+type ScholarStatsData = {
+  citations: number;
+  hIndex: number;
+  i10Index: number;
+};
+
 function RollingNumber({ value, duration = 800 }: { value: number; duration?: number }) {
   const [display, setDisplay] = useState(0);
   const [prevTarget, setPrevTarget] = useState(0);
@@ -32,40 +38,72 @@ function RollingNumber({ value, duration = 800 }: { value: number; duration?: nu
 }
 
 export function ScholarStats() {
-  const [stats, setStats] = useState<{ citations: number; hIndex: number; i10Index: number } | null>(null);
+  const [stats, setStats] = useState<ScholarStatsData | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [refreshing, setRefreshing] = useState(false);
+  const fallback = config.scholar?.fallback ?? { citations: 0, hIndex: 0, i10Index: 0 };
 
-  const fetchStats = useCallback(async () => {
-    const fallback = config.scholar?.fallback ?? { citations: 0, hIndex: 0, i10Index: 0 };
-    const scholarUrl = config.scholar?.url ?? "";
+  const normalizeStats = useCallback(
+    (data: Partial<ScholarStatsData> | null | undefined, base: ScholarStatsData = fallback): ScholarStatsData => ({
+      citations: data?.citations ?? base.citations,
+      hIndex: data?.hIndex ?? base.hIndex,
+      i10Index: data?.i10Index ?? base.i10Index,
+    }),
+    [fallback]
+  );
 
+  const fetchStaticStats = useCallback(async (): Promise<ScholarStatsData | null> => {
     try {
-      const params = new URLSearchParams();
-      if (scholarUrl) params.set("url", scholarUrl);
-      params.set("fallback", JSON.stringify(fallback));
+      const res = await fetch("/scholar-stats.json", { cache: "no-store" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return normalizeStats(data);
+    } catch {
+      return null;
+    }
+  }, [normalizeStats]);
 
-      const res = await fetch(`/api/scholar?${params.toString()}`, { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        setStats({
-          citations: data.citations ?? fallback.citations,
-          hIndex: data.hIndex ?? fallback.hIndex,
-          i10Index: data.i10Index ?? fallback.i10Index,
-        });
+  const fetchApiStats = useCallback(
+    async (): Promise<ScholarStatsData | null> => {
+      const scholarUrl = config.scholar?.url ?? "";
+
+      try {
+        const params = new URLSearchParams();
+        if (scholarUrl) params.set("url", scholarUrl);
+        const res = await fetch(`/api/scholar?${params.toString()}`, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          return normalizeStats(data);
+        }
+      } catch {}
+
+      return null;
+    },
+    [normalizeStats]
+  );
+
+  const fetchStats = useCallback(
+    async ({ forceRefresh = false }: { forceRefresh?: boolean } = {}) => {
+      const apiStats = await fetchApiStats();
+      if (apiStats) {
+        setStats(apiStats);
         setLoading(false);
         setRefreshing(false);
         return;
       }
-    } catch {
-      /* fall through to fallback */
-    }
 
-    setStats(fallback);
-    setLoading(false);
-    setRefreshing(false);
-  }, []);
+      const staticStats = await fetchStaticStats();
+      const fallbackStats = staticStats ?? fallback;
+      if (!forceRefresh) {
+        setStats(fallbackStats);
+      } else {
+        setStats((currentStats) => currentStats ?? fallbackStats);
+      }
+      setLoading(false);
+      setRefreshing(false);
+    },
+    [fallback, fetchApiStats, fetchStaticStats]
+  );
 
   useEffect(() => {
     fetchStats();
@@ -81,8 +119,7 @@ export function ScholarStats() {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setStats(null);
-    fetchStats();
+    fetchStats({ forceRefresh: true });
   };
 
   const scholarUrl = config.scholar?.url ?? "https://scholar.google.com/citations?user=0YSmKi4AAAAJ&hl=en&oi=ao";

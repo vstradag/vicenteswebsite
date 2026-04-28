@@ -3,12 +3,17 @@ import "./styles/Loading.css";
 import { useLoading } from "../context/LoadingProvider";
 import { config } from "../config";
 import Marquee from "react-fast-marquee";
+import { getDeveloperNameLines } from "../lib/developerName";
 
 const Loading = ({ percent }: { percent: number }) => {
   const { setIsLoading } = useLoading();
   const [loaded, setLoaded] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const { firstLine, secondLine } = getDeveloperNameLines(
+    config.developer.fullName,
+    config.developer.name
+  );
 
   if (percent >= 100) {
     setTimeout(() => {
@@ -59,10 +64,14 @@ const Loading = ({ percent }: { percent: number }) => {
       <div className="loading-screen">
         <div className="loading-marquee">
           <Marquee>
-            <span>&nbsp; {config.developer.fullName} &nbsp;</span>
-            <span>&nbsp; {config.developer.fullName} &nbsp;</span>
-            <span>&nbsp; {config.developer.fullName} &nbsp;</span>
-            <span>&nbsp; {config.developer.fullName} &nbsp;</span>
+            {[...Array(4)].map((_, index) => (
+              <span key={index}>
+                <span className="loading-name-stack">
+                  <span>{firstLine}</span>
+                  <span>{secondLine}</span>
+                </span>
+              </span>
+            ))}
           </Marquee>
         </div>
         <div

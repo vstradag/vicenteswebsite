@@ -4,10 +4,16 @@ import { config } from "../config";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
+import { getDeveloperNameLines } from "../lib/developerName";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
+  const { firstLine, secondLine } = getDeveloperNameLines(
+    config.developer.fullName,
+    config.developer.name
+  );
+
   useEffect(() => {
     const contactTimeline = gsap.timeline({
       scrollTrigger: {
@@ -59,7 +65,10 @@ const Contact = () => {
   return (
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
-        <h3>{config.developer.fullName}</h3>
+        <h3 className="contact-name-stack" aria-label={config.developer.fullName}>
+          <span>{firstLine}</span>
+          <span>{secondLine}</span>
+        </h3>
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Email</h4>
@@ -133,7 +142,11 @@ const Contact = () => {
           </div>
           <div className="contact-box">
             <h2>
-              Designed and Developed <br /> by <span>{config.developer.fullName}</span>
+              Designed and Developed <br /> by{" "}
+              <span className="contact-name-stack contact-name-stack--inline" aria-label={config.developer.fullName}>
+                <span>{firstLine}</span>
+                <span>{secondLine}</span>
+              </span>
             </h2>
             <h5>
               <MdCopyright /> {new Date().getFullYear()}

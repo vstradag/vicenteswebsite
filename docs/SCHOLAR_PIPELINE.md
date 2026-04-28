@@ -19,14 +19,14 @@ This document explains how the portfolio fetches citations, h-index, and i10-ind
 
 | Source              | When used                                      | Needs API key?       |
 |---------------------|------------------------------------------------|----------------------|
+| SerpApi             | Live API path when `SERPAPI_KEY` is set in Vercel | Yes (free tier: 250/mo) |
+| Direct HTML fetch   | Live fallback on each visit; often blocked by Google | No                   |
 | `/scholar-stats.json` | Static file, updated by GitHub Action          | No                   |
-| SerpApi             | When `SERPAPI_KEY` is set in Vercel            | Yes (free tier: 250/mo) |
-| Direct HTML fetch   | Fallback; often blocked by Google              | No                   |
 | Config fallback     | Last resort; manual values in `config.ts`      | No                   |
 
-1. **Frontend** checks `/scholar-stats.json` (cached from GitHub Action).
-2. If missing or invalid → calls `/api/scholar`.
-3. **API** uses SerpApi when `SERPAPI_KEY` exists, else direct fetch, else fallback from config.
+1. **Frontend** calls `/api/scholar` first on each visit.
+2. If the live API path fails, the UI falls back to `/scholar-stats.json`.
+3. **API** uses SerpApi when `SERPAPI_KEY` exists, else direct fetch, else static JSON, else config fallback.
 
 ---
 
@@ -59,7 +59,7 @@ Visit your site; stats should be loaded from SerpApi. Check the API response or 
 
 ## Option B: GitHub Action + scholarly (free, best-effort)
 
-A weekly GitHub Action runs a Python script that fetches stats and commits `public/scholar-stats.json`.
+A daily GitHub Action runs a Python script that fetches stats and commits `public/scholar-stats.json`.
 
 ### Requirements
 
@@ -68,9 +68,9 @@ A weekly GitHub Action runs a Python script that fetches stats and commits `publ
 
 ### How it works
 
-- **Schedule**: Weekly on Sundays at 12:00 UTC.
+- **Schedule**: Daily at 12:00 UTC.
 - **Manual run**: **Actions** → **Update Scholar Stats** → **Run workflow**.
-- **Script**: `scripts/fetch-scholar-stats.py` uses the `scholarly` library.
+- **Script**: `scripts/fetch-scholar-stats.py` tries `scholarly` first, then direct HTML parsing if needed.
 - **Output**: Updates `public/scholar-stats.json`, which the site serves as static data.
 
 ### Notes

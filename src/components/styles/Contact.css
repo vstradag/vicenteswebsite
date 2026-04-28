@@ -17,6 +17,16 @@
   margin: 0;
   margin-bottom: 30px;
 }
+.contact-name-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 0.95;
+  gap: 0.08em;
+}
+.contact-name-stack--inline {
+  margin-top: 6px;
+}
 .contact-flex {
   display: flex;
   justify-content: space-between;
@@ -119,6 +129,9 @@ a.contact-social {
   }
 }
 @media only screen and (max-width: 900px) {
+  .contact-name-stack {
+    align-items: flex-start;
+  }
   .contact-flex {
     flex-direction: column;
     gap: 40px;

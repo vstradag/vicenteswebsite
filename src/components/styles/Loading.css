@@ -2,26 +2,47 @@
   position: fixed;
   width: 100vw;
   height: var(--vh);
-  /* background-image: linear-gradient(#cbb1ff, #d8c4ff); */
-  background-color: #eae5ec;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(15, 75, 28, 0.28), transparent 45%),
+    linear-gradient(180deg, #020703 0%, #010301 100%);
   z-index: 999999999;
   display: flex;
   place-items: center;
   justify-content: center;
 }
+.loading-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(112, 255, 163, 0.07) 0%, rgba(112, 255, 163, 0.01) 100%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(130, 255, 170, 0.05) 0px,
+      rgba(130, 255, 170, 0.05) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  pointer-events: none;
+}
 .loading-button {
   padding: 20px 50px;
   border-radius: 100px;
-  background-color: #000;
+  background-color: #030b04;
   overflow: hidden;
   font-size: 18px;
   font-weight: 500;
   position: relative;
   z-index: 9;
+  color: #b9ffc4;
+  border: 1px solid rgba(133, 255, 166, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(41, 122, 57, 0.35),
+    0 0 32px rgba(49, 173, 76, 0.22);
 }
 .loading-button::before {
   content: "";
-  background-color: #ffffff;
+  background-color: #70ff8a;
   top: var(--mouse-y);
   left: var(--mouse-x);
   border-radius: 50%;
@@ -48,14 +69,17 @@
   min-width: 0px;
   min-height: 0px;
   border-radius: 100px;
-  background-color: #000;
+  background-color: #020804;
   overflow: hidden;
   transition: 0.8s ease-in-out;
   transition-delay: 0.2s;
-  box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0px 15px 30px 0px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(49, 173, 76, 0.18);
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid rgba(133, 255, 166, 0.2);
 }
 .loading-clicked {
   transition-delay: 0ms;
@@ -70,7 +94,7 @@
   overflow: visible;
 }
 .loading-hover {
-  background-color: #a87cff;
+  background-color: rgba(77, 255, 118, 0.9);
   width: 250px;
   height: 120px;
   position: absolute;
@@ -92,7 +116,7 @@
 }
 .loading-content {
   position: relative;
-  background-color: #000;
+  background-color: #030b04;
   width: 100%;
   overflow: hidden;
   transition: 0.6s;
@@ -128,7 +152,8 @@
   top: 50%;
   right: 0;
   transform: translateY(-50%);
-  opacity: 0.7;
+  opacity: 0.9;
+  color: rgba(185, 255, 196, 0.78);
 }
 .loading-box {
   position: absolute;
@@ -137,8 +162,9 @@
   transform: translate(100%, -50%);
   width: 15px;
   height: 25px;
-  background-color: white;
+  background-color: #7cff9c;
   animation: blink 1s linear infinite;
+  box-shadow: 0 0 12px rgba(124, 255, 156, 0.65);
 }
 .loading-icon {
   transform: scale(0);
@@ -191,7 +217,7 @@
   left: 50%;
   transform: translateX(-50%);
   top: 0;
-  color: var(--backgroundColor);
+  color: #6eff8f;
 }
 .loader-title {
   font-weight: 700;
@@ -257,8 +283,9 @@
   position: relative;
   width: 10px;
   height: 60px;
-  background-color: #000;
+  background-color: rgba(110, 255, 143, 0.45);
   display: block;
+  box-shadow: 0 0 8px rgba(110, 255, 143, 0.12);
 }
 .loaderGame-line:nth-child(2n) {
   margin-top: 40px;
@@ -272,10 +299,13 @@
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background-color: #a87cff;
+  background-color: #8dff94;
   animation: ball25 7s infinite;
   transform: translateY(10px);
   animation-timing-function: cubic-bezier(0.3, 1.18, 0.63, 1.28);
+  box-shadow:
+    0 0 12px rgba(141, 255, 148, 0.75),
+    0 0 24px rgba(141, 255, 148, 0.45);
 }
 .loading-marquee {
   position: absolute;
@@ -283,25 +313,36 @@
   left: 0;
   width: 100%;
   transform: translateY(-50%);
-  color: var(--backgroundColor);
+  color: rgba(142, 255, 160, 0.92);
   font-size: 60px;
   font-weight: 600;
   text-transform: uppercase;
+  z-index: 0;
 }
 .loading-marquee span {
   padding: 0px 50px;
   position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 .loading-marquee span::before {
   content: "";
   width: 20px;
   height: 20px;
-  background-color: var(--backgroundColor);
+  background-color: rgba(110, 255, 143, 0.8);
   position: absolute;
   top: 50%;
   border-radius: 50px;
   left: 0px;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0 14px rgba(110, 255, 143, 0.45);
+}
+.loading-name-stack {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.12em;
+  line-height: 0.88;
+  align-items: flex-start;
 }
 @keyframes ball25 {
   0% {
