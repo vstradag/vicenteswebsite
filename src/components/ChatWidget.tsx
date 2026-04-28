@@ -315,7 +315,7 @@ export default function ChatWidget() {
           >
             <span className="chat-teaser-label">{prompts[promptIndex]}</span>
             <span className="chat-teaser-arrow" aria-hidden="true">
-              ->
+              {"->"}
             </span>
           </button>
         )}
