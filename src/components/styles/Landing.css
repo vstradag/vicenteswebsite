@@ -396,7 +396,7 @@
   margin-left: 0;
   font-family: "Geist", sans-serif;
   font-weight: 500;
-  font-size: clamp(1.9rem, 3.6vw + 0.65rem, 4.15rem);
+  font-size: 28px;
   line-height: 1.06;
   position: relative;
   text-transform: none;
@@ -483,6 +483,7 @@ h2.landing-info-h2 {
   }
 
   .landing-info h2 {
+    font-size: 30px;
     line-height: 1.06;
   }
 }
@@ -506,6 +507,7 @@ h2.landing-info-h2 {
   }
 
   .landing-info h2 {
+    font-size: 40px;
     line-height: 1.06;
   }
 }
@@ -589,6 +591,7 @@ h2.landing-info-h2 {
   }
 
   .landing-info h2 {
+    font-size: 60px;
     line-height: 1.06;
   }
 }
