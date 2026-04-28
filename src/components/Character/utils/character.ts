@@ -53,27 +53,12 @@ const setCharacter = (
                     materialName.includes("screenlight") ||
                     meshName.includes("glass") ||
                     objectName.includes("screenlight");
-                  const isDeskOrMonitor =
-                    objectName.includes("keyboard") ||
-                    objectName.includes("plane.002") ||
-                    objectName.includes("plane.003") ||
-                    objectName.includes("plane.004");
-
                   if (isScreenLight) {
                     material.color = new THREE.Color(0x61f08b);
                     material.emissive = new THREE.Color(0x61f08b);
                     material.emissiveIntensity = 2.4;
                     material.map = null;
                     material.emissiveMap = null;
-                    material.needsUpdate = true;
-                  } else if (isDeskOrMonitor) {
-                    material.color = material.color.clone().lerp(
-                      new THREE.Color(0xdfffe7),
-                      0.22
-                    );
-                    material.emissive = new THREE.Color(0x1b5f31);
-                    material.emissiveIntensity = 0.22;
-                    material.envMapIntensity = 0.03;
                     material.needsUpdate = true;
                   }
                 }
