@@ -9,6 +9,7 @@ const Landing = ({ children }: PropsWithChildren) => {
     config.developer.fullName,
     config.developer.name
   );
+  const [titleLead, titleAccent] = config.developer.title.split(/\s+and\s+/i);
 
   return (
     <>
@@ -24,7 +25,10 @@ const Landing = ({ children }: PropsWithChildren) => {
           </div>
           <div className="landing-info">
             <h2 className="landing-info-h2">
-              <div className="landing-h2-1">{config.developer.title}</div>
+              <div className="landing-h2-1">
+                <span>{titleLead ?? config.developer.title}</span>
+                {titleAccent ? <span className="landing-h2-accent"> {titleAccent}</span> : null}
+              </div>
             </h2>
           </div>
           {/* Fallback photo when 3D is unavailable; hidden when WebGL character shows */}

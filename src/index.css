@@ -8,7 +8,7 @@
   line-height: 1.5;
   scroll-behavior: smooth;
   color-scheme: light dark;
-  color: #eae5ec;
+  color: #edf7ee;
   background-color: var(--backgroundColor);
 
   font-synthesis: none;
@@ -18,8 +18,8 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  --accentColor: #c2a4ff;
-  --backgroundColor: #0b080c;
+  --accentColor: #61f08b;
+  --backgroundColor: #030704;
   --vh: 100vh;
   --vh: 100svh;
 }
@@ -94,7 +94,7 @@ main {
 body {
   margin: 0;
   height: auto;
-  background-color: #000;
+  background-color: #010201;
   flex-grow: 1;
   --cWidth: calc(100% - 30px);
   --cMaxWidth: 1920px;
@@ -143,7 +143,7 @@ body {
   margin-bottom: 0;
   padding-top: 150px;
   padding-bottom: 150px;
-  background: linear-gradient(180deg, rgba(11, 8, 12, 0.95) 0%, rgba(11, 8, 12, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(3, 7, 4, 0.95) 0%, rgba(1, 2, 1, 0.99) 100%);
   background-color: var(--backgroundColor);
   overflow: hidden;
   display: flex;
@@ -160,8 +160,8 @@ body {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 20% 50%, rgba(194, 164, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 50%, rgba(194, 164, 255, 0.08) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(97, 240, 139, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(41, 173, 89, 0.12) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }

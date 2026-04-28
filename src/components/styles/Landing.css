@@ -145,13 +145,13 @@
   /* Specific styling for the distinct parts */
   .landing-h2-1 {
     font-size: 24px !important;
-    color: var(--accentColor);
-    font-weight: 700;
+    color: #edf7ee;
+    font-weight: 500;
   }
 
   .landing-h2-info {
     font-size: 18px !important;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(237, 247, 238, 0.86);
   }
 
   .landing-info-h2::after {
@@ -182,8 +182,8 @@
   position: fixed;
   width: 300px;
   height: 300px;
-  background-color: #fb8dff;
-  box-shadow: inset -50px 40px 50px rgba(84, 0, 255, 0.6);
+  background-color: rgba(97, 240, 139, 0.78);
+  box-shadow: inset -50px 40px 50px rgba(3, 90, 37, 0.72);
   filter: blur(60px);
   border-radius: 50%;
   animation: loadingCircle 5s linear infinite;
@@ -222,8 +222,8 @@
   display: none;
   width: 300px;
   height: 300px;
-  background-color: #fb8dff;
-  box-shadow: inset -50px 40px 50px rgba(84, 0, 255, 0.6);
+  background-color: rgba(97, 240, 139, 0.72);
+  box-shadow: inset -50px 40px 50px rgba(3, 90, 37, 0.68);
   filter: blur(50px);
   border-radius: 50%;
   animation: loadingCircle2 5s linear infinite;
@@ -255,9 +255,9 @@
   width: 400px;
   height: 400px;
   z-index: 1;
-  background-color: #f59bf8;
+  background-color: rgba(80, 230, 121, 0.78);
   transform: translate(-50%, 36%) scaleX(1.4);
-  box-shadow: inset 66px 35px 85px 0px rgba(85, 0, 255, 0.65);
+  box-shadow: inset 66px 35px 85px 0px rgba(2, 73, 29, 0.72);
   filter: blur(50px);
   border-radius: 50%;
   top: 50%;
@@ -379,20 +379,20 @@
   margin-top: -20px;
   margin-left: 20px;
   font-family: "Geist", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 28px;
   line-height: 1.2;
   position: relative;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  text-transform: none;
+  letter-spacing: 0.03em;
   white-space: normal;
   max-width: 100%;
 }
 
 .landing-h2-info {
   white-space: normal;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
+  color: rgba(237, 247, 238, 0.86);
+  font-weight: 500;
 }
 
 .landing-h2-info-1 {
@@ -402,25 +402,25 @@
 }
 
 h2.landing-info-h2 {
-  color: #c481ff;
+  color: #edf7ee;
   font-size: 36px;
   margin: 0;
   font-family: "Geist", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   position: relative;
   margin-left: -5px;
 }
 
-/* 3D text effect – layered shadows for depth */
 .landing-h2-1 {
-  text-shadow:
-    1px 1px 0 rgba(0, 0, 0, 0.3),
-    2px 2px 0 rgba(0, 0, 0, 0.2),
-    3px 3px 0 rgba(0, 0, 0, 0.15),
-    4px 4px 0 rgba(0, 0, 0, 0.1),
-    5px 5px 8px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(194, 164, 255, 0.3);
-  transform: perspective(500px) translateZ(10px);
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.2em;
+  text-shadow: none;
+  transform: none;
+}
+
+.landing-h2-accent {
+  color: var(--accentColor);
 }
 
 .landing-h2-2 {
