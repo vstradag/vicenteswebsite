@@ -101,6 +101,12 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const prompts = [
+    "Chat with me",
+    "Ask about my research",
+    "Explore my work",
+  ];
+  const [promptIndex, setPromptIndex] = useState(0);
 
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -111,6 +117,14 @@ export default function ChatWidget() {
   }, []);
 
   useEffect(scrollToBottom, [messages, loading, error, open, scrollToBottom]);
+
+  useEffect(() => {
+    if (open) return;
+    const timer = window.setInterval(() => {
+      setPromptIndex((current) => (current + 1) % prompts.length);
+    }, 2600);
+    return () => window.clearInterval(timer);
+  }, [open, prompts.length]);
 
   useEffect(() => {
     const el = messagesRef.current;
@@ -291,13 +305,29 @@ export default function ChatWidget() {
         </div>
       )}
 
-      <button
-        className="chat-fab"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close chat" : "Open chat"}
-      >
-        {open ? "✕" : "💬"}
-      </button>
+      <div className={`chat-fab-wrap ${open ? "is-open" : ""}`}>
+        {!open && (
+          <button
+            className="chat-teaser"
+            onClick={() => setOpen(true)}
+            aria-label="Open chat teaser"
+          >
+            <span className="chat-teaser-label">{prompts[promptIndex]}</span>
+            <span className="chat-teaser-arrow" aria-hidden="true">
+              ->
+            </span>
+          </button>
+        )}
+
+        <button
+          className="chat-fab"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close chat" : "Open chat"}
+        >
+          <span className="chat-fab-ring" aria-hidden="true" />
+          <span className="chat-fab-icon">{open ? "✕" : "💬"}</span>
+        </button>
+      </div>
     </>
   );
 }
