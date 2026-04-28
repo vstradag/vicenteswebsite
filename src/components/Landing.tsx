@@ -22,13 +22,11 @@ const Landing = ({ children }: PropsWithChildren) => {
             <ScholarStats />
           </div>
           <div className="landing-info">
-            <h2 className="landing-info-h2">
-              <div className="landing-h2-1">
-                <span className="landing-h2-line landing-h2-line--accent">
-                  Behavioral and
-                </span>
-                <span className="landing-h2-line">Vision Scientist</span>
-              </div>
+            <h2 className="landing-info-h2 landing-h2-1">
+              <span className="landing-h2-line landing-h2-line--accent">
+                Behavioral and
+              </span>
+              <span className="landing-h2-line">Vision Scientist</span>
             </h2>
           </div>
           {/* Fallback photo when 3D is unavailable; hidden when WebGL character shows */}
