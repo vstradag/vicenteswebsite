@@ -9,7 +9,6 @@ const Landing = ({ children }: PropsWithChildren) => {
     config.developer.fullName,
     config.developer.name
   );
-  const [titleLead, titleAccent] = config.developer.title.split(/\s+and\s+/i);
 
   return (
     <>
@@ -25,8 +24,10 @@ const Landing = ({ children }: PropsWithChildren) => {
           <div className="landing-info">
             <h2 className="landing-info-h2">
               <div className="landing-h2-1">
-                <span>{titleLead ? `${titleLead} and` : config.developer.title}</span>
-                {titleAccent ? <span className="landing-h2-accent"> {titleAccent}</span> : null}
+                <span className="landing-h2-line landing-h2-line--accent">
+                  Behavioral and
+                </span>
+                <span className="landing-h2-line">Vision Scientist</span>
               </div>
             </h2>
           </div>
