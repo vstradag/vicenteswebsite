@@ -54,6 +54,9 @@ const setCharacter = (
                     meshName.includes("glass") ||
                     objectName.includes("screenlight");
                   if (isScreenLight) {
+                    // Keep this mesh as an invisible anchor for lighting; the
+                    // geometry itself renders as the stray white square.
+                    mesh.visible = false;
                     material.color = new THREE.Color(0x61f08b);
                     material.emissive = new THREE.Color(0x61f08b);
                     material.emissiveIntensity = 2.4;
