@@ -13,10 +13,14 @@ const setLighting = (scene: THREE.Scene) => {
   directionalLight.shadow.camera.far = 50;
   scene.add(directionalLight);
 
-  const pointLight = new THREE.PointLight(0x61f08b, 0, 100, 3);
+  const pointLight = new THREE.PointLight(0x61f08b, 0, 24, 3);
   pointLight.position.set(3, 12, 4);
   pointLight.castShadow = true;
   scene.add(pointLight);
+  const screenWorldPos = new THREE.Vector3();
+  const screenWorldQuat = new THREE.Quaternion();
+  const screenGlowOffset = new THREE.Vector3(0, 0.12, 0.55);
+  const screenGlowPos = new THREE.Vector3();
 
   new RGBELoader()
     .setPath("/models/")
@@ -28,8 +32,12 @@ const setLighting = (scene: THREE.Scene) => {
     });
 
   function setPointLight(screenLight: any) {
-    if (screenLight.material.opacity > 0.9) {
-      pointLight.intensity = screenLight.material.emissiveIntensity * 20;
+    if (screenLight?.material?.opacity > 0.9) {
+      screenLight.getWorldPosition(screenWorldPos);
+      screenLight.getWorldQuaternion(screenWorldQuat);
+      screenGlowPos.copy(screenGlowOffset).applyQuaternion(screenWorldQuat);
+      pointLight.position.copy(screenWorldPos).add(screenGlowPos);
+      pointLight.intensity = screenLight.material.emissiveIntensity * 11;
     } else {
       pointLight.intensity = 0;
     }
